@@ -2,27 +2,38 @@
 
 #define BUFFER_SIZE 512
 
+void printStream(FILE *stream);
+
 int main (int argc, char *argv[])
 {
-    if (argc < 2)
+    int status = 0;
+    if (argc == 1)
     {
-        printf("Usage: ./mycat <filename>\n");
-        return 1;
+        printStream(stdin);
     }
+    else
+    {
+        for (int i = 1; i < argc; i++)
+        {
+            FILE *fp = fopen(argv[i], "r");
+            if (fp == NULL)
+            {
+                perror(argv[i]);
+                status = 1;
+                continue;
+            }
+            printStream(fp);
+            fclose(fp);
+        }
+    }
+    return status;
+}
 
+void printStream (FILE *stream)
+{
     char buff[BUFFER_SIZE];
-
-    FILE *fp = fopen(argv[1], "r");
-    if (fp == NULL)
-    {
-        perror(argv[1]);
-        return 1;
-    }
-
-    while(fgets(buff, BUFFER_SIZE, fp) != NULL)
+    while(fgets(buff, BUFFER_SIZE, stream) != NULL)
     {
         printf("%s", buff);
     }
-    fclose(fp);
-    return 0;
 }
