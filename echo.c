@@ -1,39 +1,42 @@
 #include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 #define BUFFER_SIZE 512
 
-void printStream(FILE *stream);
+void printStream(int);
 
 int main (int argc, char *argv[])
 {
     int status = 0;
     if (argc == 1)
     {
-        printStream(stdin);
+        printStream(0);
     }
     else
     {
         for (int i = 1; i < argc; i++)
         {
-            FILE *fp = fopen(argv[i], "r");
-            if (fp == NULL)
+            int fd = open(argv[i], O_RDONLY);
+            if (fd == -1)
             {
                 perror(argv[i]);
                 status = 1;
                 continue;
             }
-            printStream(fp);
-            fclose(fp);
+            printStream(fd);
+            close(fd);
         }
     }
     return status;
 }
 
-void printStream (FILE *stream)
+void printStream (int fd)
 {
     char buff[BUFFER_SIZE];
-    while(fgets(buff, BUFFER_SIZE, stream) != NULL)
+    ssize_t bytesRead;
+    while((bytesRead = read(fd, buff, BUFFER_SIZE)) > 0)
     {
-        printf("%s", buff);
+        write(1, buff, bytesRead);
     }
 }
