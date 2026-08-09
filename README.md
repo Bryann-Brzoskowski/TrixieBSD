@@ -1,4 +1,10 @@
-<img align="right" width="150" height="120" alt="TrixieBSD logo" src="https://github.com/user-attachments/assets/2600a5ef-9ef7-4328-8449-e1f96681ae99" />
+<p align="center">
+  <img width="150" height="120" alt="TrixieBSD logo" src="<img width="1536" height="1024" alt="ChatGPT Image Aug 9, 2026, 03_13_23 PM" src="https://github.com/user-attachments/assets/7c097fb9-f18f-4ca4-98e0-5a8e043e5e2a"/>
+</p>
+
+# TrixieBSD
+
+> A hobby Unix-like operating system in early development.
 
 # TrixieBSD
 
