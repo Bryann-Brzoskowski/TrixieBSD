@@ -1,7 +1,7 @@
 <p align="center">
   <img
     src="./assets/trixiebsd-logo.png"
-    width="150"
+    width="300"
     alt="TrixieBSD logo"
   />
 </p>
