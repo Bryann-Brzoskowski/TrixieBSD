@@ -1,14 +1,16 @@
 <p align="center">
-  <img width="150" height="120" alt="TrixieBSD logo" src="<img width="1536" height="1024" alt="ChatGPT Image Aug 9, 2026, 03_13_23 PM" src="https://github.com/user-attachments/assets/7c097fb9-f18f-4ca4-98e0-5a8e043e5e2a"/>
+  <img
+    src="./assets/trixiebsd-logo.png"
+    width="150"
+    alt="TrixieBSD logo"
+  />
 </p>
 
-# TrixieBSD
+<h1 align="center">TrixieBSD</h1>
 
-> A hobby Unix-like operating system in early development.
-
-# TrixieBSD
-
-> A hobby Unix-like operating system in early development.
+<p align="center">
+  A hobby Unix-like operating system in early development.
+</p>
 
 TrixieBSD is a personal hobby operating system project focused on
 understanding how operating systems work from the ground up.
