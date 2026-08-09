@@ -1,29 +1,43 @@
+/*
+ * TrixieBSD
+ * ========================
+ *
+ * Component   : cat
+ * Description : Prototype implementation of a cat-like utility.
+ *
+ * Status      : Experimental / Prototype
+ * Target      : Trixie userspace
+ *
+ * Copyright (c) 2026 Bryann Brzoskowski
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
+ * This implementation is part of the early development work
+ * toward the TrixieBSD operating system and is not representative
+ * of the final TrixieBSD userspace architecture.
+ */
+
 #include <stdio.h>
 #include <fcntl.h>
 #include <unistd.h>
 
 #define BUFFER_SIZE 512
 
-#define AUTHORS \
-    proper_name ("Bryann Brzoskowski")
-
 int printStream(int);
 
 int main (int argc, char *argv[])
 {
-    // error status
     int status = 0;
     int result = 0;
 
-    if (argc == 1)  // If only 1 arg is provided
+    if (argc == 1)  // No files provided: read from stdin
     {
-        result = printStream(0);
+        result = printStream(STDIN_FILENO);
         if (result == 1)
         {
             status = 1;
         }
     }
-    else    // If 2 or more arguments
+    else    // Files provided
     {
         // Loops through each argv
         for (int i = 1; i < argc; i++)
@@ -45,7 +59,12 @@ int main (int argc, char *argv[])
             {
                 status = 1;
             }
-            close(fd);
+
+            if (close(fd) == -1)
+            {
+                perror("close");
+                status = 1;
+            }
         }
     }
     return status;
@@ -61,22 +80,30 @@ int printStream (int fd)
 
     while ((bytesRead = read(fd, buff, BUFFER_SIZE)) > 0)
     {
-        bytesWritten = write(1, buff, bytesRead);
+        bytesWritten = write(STDOUT_FILENO, buff, bytesRead);
 
         if (bytesWritten == -1)
         {
             perror("write");
             return 1;
         }
+        if (bytesWritten == 0)
+        {
+            return 1;
+        }
         
         // write remaning bytes if bytesWritten is less than bytesRead
         while (bytesWritten < bytesRead)
         {
-            currentWrite = write(1, buff + bytesWritten, bytesRead - bytesWritten);
+            currentWrite = write(STDOUT_FILENO, buff + bytesWritten, bytesRead - bytesWritten);
 
             if (currentWrite == -1)
             {
                 perror("write");
+                return 1;
+            }
+            if (currentWrite == 0)
+            {
                 return 1;
             }
 
