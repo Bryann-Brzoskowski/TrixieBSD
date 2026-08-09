@@ -4,6 +4,9 @@
 
 #define BUFFER_SIZE 512
 
+#define AUTHORS \
+    proper_name ("Bryann Brzoskowski")
+
 int printStream(int);
 
 int main (int argc, char *argv[])
@@ -54,11 +57,35 @@ int printStream (int fd)
     char buff[BUFFER_SIZE];
     ssize_t bytesRead;
     ssize_t bytesWritten;
-    while((bytesRead = read(fd, buff, BUFFER_SIZE)) > 0)
+    ssize_t currentWrite;
+
+    while ((bytesRead = read(fd, buff, BUFFER_SIZE)) > 0)
     {
-        write(1, buff, bytesWritten);
+        bytesWritten = write(1, buff, bytesRead);
+
+        if (bytesWritten == -1)
+        {
+            perror("write");
+            return 1;
+        }
+        
+        // write remaning bytes if bytesWritten is less than bytesRead
+        while (bytesWritten < bytesRead)
+        {
+            currentWrite = write(1, buff + bytesWritten, bytesRead - bytesWritten);
+
+            if (currentWrite == -1)
+            {
+                perror("write");
+                return 1;
+            }
+
+            bytesWritten += currentWrite;
+        }
+
     }
-    if(bytesRead == -1)
+
+    if (bytesRead == -1)
     {
         perror("read");
         return 1;
